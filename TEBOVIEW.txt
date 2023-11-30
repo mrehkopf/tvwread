@@ -1,0 +1,188 @@
+Chaotic notes, probably makes most sense to read this file bottom to top...
+
+TEBOVIEW
+
+T490S.tvw
+TOP LAYER PADS @0x43a20
+BOTTOM LAYER PADS @0x11b98f
+NET NAMES @0x22ba4c
+PARTS @0x232c33
+
+X570S AORUS MASTER REV1.0.tvw
+
+TOP LAYER PADS @0x24AB
+BOTTOM LAYER PADS @0x4A06EC
+NET NAMES @0x5C1052
+PARTS @0x5CA67F
+
+0x24B3: pad/net definition {
+	uint32_t network_index;
+	uint32_t dcode;
+	int32_t posx;
+	int32_t posy;
+	uint8_t unknown[4];
+	int32_t corner1_x;
+	int32_t corner1_y;
+	int32_t corner2_x;
+	int32_t corner2_y;
+	LIST additional_info:
+		entry: uint32_t info_tag;
+		       uint32_t info_payload[3];
+	if no additional info is stored, only the termination bytes are present.
+	uint16_t termination_0x0000;
+}
+
+
+Part instances' pins are referenced to pads by giving the sequence number of the pad shifted left by 3 bits (bottom 3 bits = flags?)
+Part instances' layer seems to be determined by a dword value following the pin count (2=TOP, 7=BOTTOM)
+Sequence number appears to be per layer; highest found pad ID on a part instance was found on TOP layer
+
+Highest pad number in part pins: 0x169F0 (divided by 8 = 0x2D3E)
+!!! This coincides with the highest pad number on top layer that has the first flag byte set to 0x01!
+
+...
+@00075d87: PAD #0x00002d3d: NET=000004b6 DCODE=165 X=24370 Y=-807760 FLAGS=01010000
+@00075dad: PAD #0x00002d3e: NET=0000087a DCODE=165 X=33630 Y=-811500 FLAGS=01010000
+@00075dd3: PAD #0x00002d3f: NET=00000894 DCODE=176 X=84500 Y=-353500 FLAGS=00010000
+@00075df9: PAD #0x00002d40: NET=00000894 DCODE=176 X=62500 Y=-352500 FLAGS=00010000
+...
+
+
+16 00 00 00 02 00 00 00 02 00 00 00 14 00 00 00 00 00 00 00 03 00 00 00 02 00 00 00 01 00 00 00
+
+07 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+HEADER: Strings are scrambled!
+13 4F 39 35 77 2D 32 38 70 73 34 39 6D 20 30 32 76 39 6F 2E magic string "Tebo-ictview files."
+01 00 00 00 extra strings? yes
+07 47 33 34 76 53 34 7A licensee
+03 59 5A 4D password
+11 59 39 36 30 76 35 30 6E 20 62 65 2C 20 63 66 63 67 date
+00 ??? string
+00 ??? string
+06 59 5A 4D 64 65 64 ??? string "DFT002"
+16 00 00 00 02 00 00 00 02 00 00 00 14 00 00 00
+
+LAYER FORMATS:
+
+Empty Layer:
+00 00 00 00 03 00 00 00 02 00 00 00 01 00 00 00 preamble
+- OR -
+01 00 00 00 02 00 00 00 01 00 00 00 preamble for short layer record (sub layer? graphic only?)
+00
+00
+00 
+00 00 00 00 layer type
+FF 00 00 00 pad color
+00 FF 00 00 line color
+00 00 00 00 no DCODEs
+00 00 00 00 00 00 00 00
+07 00 00 00 00 00 00 00 00 00 00 00
+04 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00: next layer is 3-2-1 OR end of layers if followed by 12x 00
+01 00 00 00: next layer is 2-1
+
+SILKSCREEN_TOP Layer:
+03 00 00 00 02 00 00 00 01 00 00 00 preamble
+0E 53 49 4C 4B 53 43 52 45 45 4E 5F 54 4F 50
+0E 53 49 4C 4B 53 43 52 45 45 4E 5F 54 4F 50
+47 45 3A 5C 44 46 54 5C 46 54 34 39 31 2D 46 58 33 39 30 5C 53 56 54 5C 4E 4D 42 38 39 31 52 31 30 5C 4E 4D 42 38 39 31 52 31 30 2D 46 41 42 5C 63 64 73 32 66 5F 4E 4D 42 38 39 31 52 31 30 2D 31 32 31 37 2E 63 61 64
+07 00 00 00 layer type
+CC FF CC 00 pad color
+CC FF CC 00 line color
+0E 00 00 00 DCODEs: 4
+
+Layer Objects in sequence:
+1. DCODE declarations.
+2. Pads
+3. Lines
+4. Arcs?
+5. Polygons (surfaces)
+6. Labels
+
+uint32_t count;
+uint32_t unknown;
+
+
+TOP Layer:
+03 00 00 00 02 00 00 00 01 00 00 00
+03 54 4F 50
+03 54 4F 50
+47 45 3A 5C 44 46 54 5C 46 54 34 39 31 2D 46 58 33 39 30 5C 53 56 54 5C 4E 4D 42 38 39 31 52 31 30 5C 4E 4D 42 38 39 31 52 31 30 2D 46 41 42 5C 63 64 73 32 66 5F 4E 4D 42 38 39 31 52 31 30 2D 31 32 31 37 2E 63 61 64
+01 00 00 00
+3C B3 71 00
+FF 00 00 00
+C5 00 00 00 DCODEs: 186
+<DCODE definitions here>
+
+
+07 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 02 00 00 00 01 00 00 00
+
+DCODE definition:
+
+Types:
+0: round
+1: rectangle?
+2: ?
+3: oblong?
+4: ?
+5: custom
+
+Standard DCODE (0..3):
+01 00 00 00 preamble
+F4 01 00 00 width
+F4 01 00 00 height
+00 00 00 00 type
+00 00 00 00 ?
+00 00 00 00 ?
+end
+
+Custom DCODE (5):
+01 00 00 00 preamble
+13 03 00 00 width
+4E 0C 00 00 height
+05 00 00 00 type
+00 00 00 00 ?
+06 43 75 73 74 6F 6D name
+76 FE FF FF D9 F9 FF FF 89 01 00 00 27 06 00 00 bounding box
+01 00 00 00 02 00 00 00 01 00 00 00
+00 00 00 00 ?
+00 00 00 00 ?
+07 00 00 00 number of points (*8 bytes)
+number of points times {
+	int32_t x;
+	int32_t y;
+}
+end
+
+
+End of DCODEs:
+01 00 00 00
+00 00 00 00
+01 00 00 00
+00 00 00 00
+
+
+Lines:
+uint32_t count;
+uint32_t unknown_00000000;
+count times{
+ 	uint32_t unknown_ffffffff;
+ 	uint32_t dcodeplus10;
+ 	uint32_t start_x;
+ 	uint32_t start_y;
+ 	uint32_t end_x;
+ 	uint32_t end_y;
+}
+
+
+
+overall sequence:
+
+1. Header (magic + licensee/password/date... + some numbers)
+2. Layers
+3. Net names
+4. ProbeDB (TODO)
+5. Part instances (component names, values, pins, pad references)
+6. Packages
